@@ -1,0 +1,89 @@
+.Dd August 24, 2018
+.Dt ALOIS 1
+.Os
+
+.Sh NAME
+.Nm alois
+.Nd really simple templates
+
+.Sh SYNOPSIS
+.Nm
+.Ar rep
+
+.Sh DESCRIPTION
+.Nm
+is a very simple template replacement program. It first reads
+the file
+.Ar rep
+which is a file containing a single lua table, which in turn
+contains string keys and lists of strings as their values:
+.Bd -literal
+{
+	key1={"val11", "val12", "val13"},
+	key2={"val21", "val22"},
+	key3={"val31", "val32", "val33", "val34"}
+}
+.Ed
+.Pp
+Then
+.Nm
+reads from stdin. Here it searches for replacement patterns in
+the form
+.Dq [var:type] ,
+where
+.Dq type
+is one of the keys in
+.Ar rep .
+Each
+.Dq var
+is assigned one random value from the list of
+.Dq type
+in
+.Ar rep ,
+and is replaced in every instance with that value.
+.Pp
+So one possible input could be
+.Bd -literal
+[x:key1] is not [y:key2], but it is instead [x:key1].
+On the other hand, [z:key1] could be [x:key1].
+.Ed
+.Pp
+and the output would be:
+.Bd -literal
+val12 is not val22, but it is instead val12.
+On the other hand, val11 could be val12.
+.Ed
+.Pp
+Both
+.Dq type
+and
+.Dq val
+in the input must both match the regular expression
+.Sq [A-Za-z0-9_]+ .
+
+.Sh EXIT STATUS
+.Ex -std
+
+.Sh BUGS
+The file
+.Ar rep
+can contain any lua code. Don't just download it from the
+internet.
+.Pp
+.Dq type
+or
+.Dq var
+can't be anything but ASCII alphanumeric. It should be
+UTF-8 compatible.
+.Pp
+There can be variables with the same name, but different
+types. These are treated as different variables.
+.Pp
+This utility probably reimplements something somebody else
+wrote.
+
+.Sh SEE ALSO
+.Xr sed 1 .
+
+.Sh AUTHORS
+.An pranomostro Aq Mt pranomostro@posteo.net

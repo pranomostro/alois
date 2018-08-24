@@ -1,0 +1,29 @@
+#!/usr/bin/env lua
+
+if #arg~=1 then
+	io.stderr:write("alois rep\n")
+	os.exit(1)
+end
+
+f=assert(io.open(arg[1], "r"))
+c=f:read("*a")
+f:close()
+
+t=load("return " .. c)()
+
+math.randomseed(os.time())
+
+s={}
+
+for line in io.lines() do
+	while line:find("%[[A-Za-z0-9_]+:[A-Za-z0-9_]+%]") do
+		name, type=line:match("%[([A-Za-z0-9_]+):([A-Za-z0-9_]+)%]")
+
+		if s[name..":"..type]==nil then
+			s[name..":"..type]=t[type][math.random(#t[type])]
+		end
+
+		line=line:gsub("%[[A-Za-z0-9_]+:[A-Za-z0-9_]+%]", s[name..":"..type], 1)
+	end
+	print(line)
+end
