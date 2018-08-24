@@ -1,30 +1,40 @@
-Template files
-==============
+Really simple templating
+========================
 
-I realized there is usually some kind of structure
-in my makefiles and man-pages, these are just some little
-files I use as templates.
+This is a very simple templating utility based on picking random
+values for variables of certain types from a value list.
 
-The makefiles in this repo have one advantage over lots of other makefile:
-they include an uninstall option.
+Assuming that the file values.lua contains the following content:
 
-Files
-=====
+	{
+		noun={"dialectic", "enlightenment", "revolution", "reduction"},
+		verb={"provides", "improves", "is"}
+	}
 
-* config.mk: template for makefile configuration
-*	all.mk: template for one single program, created from C
-	program files has the possible targets all, clean,
-	install and uninstall
-*	inst.mk: installs the target to $(PREFIX), has the targets
-	install and uninstall
-*	mult.mk: makefile that installs and uninstalls multiple
-	targets and their man-pages.
-*	mult_all.mk: makefile template for a project with two
-	libraries. Can of course be expanded to more libraries.
-* template.1: man-page template file
+A possible input to `alois values.lua` could be:
 
-But, in fact, every file in this project is somewhat a template,
-look for example at the README.md and the license file.
+	The [x:noun] of [y:noun] [v:verb] the [y:noun] of [x:noun].
+
+and the output would be something like:
+
+	The dialectic of revolution is the revolution of dialectic.
+
+More complex inputs are of course possible.
+
+The name of the utility has no meaning.
+
+Requirements
+------------
+
+This utility needs the programming language lua, and furthermore requires
+the simple unix utilities mkdir, cp, rm and chmod.
+
+Installation
+------------
+
+	make install
+
+should install alois to /usr/local.
 
 License
 =======
